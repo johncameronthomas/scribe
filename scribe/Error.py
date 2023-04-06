@@ -1,11 +1,17 @@
 class Error:
-    def __init__(self, name, details):
-        self.name = name
+    def __init__(self, details):
         self.details = details
+    
+class Illegal_Character_Error(Error):
+    def __init__(self, character):
+        super().__init__("'{}'".format(character))
+    
+    def __repr__(self):
+        return 'Illegal Character Error: {}'.format(self.details)
+    
+class Invalid_Syntax_Error(Error):
+    def __init__(self):
+        super().__init__(None)
 
     def __repr__(self):
-        return '{} Error: {}'.format(self.name, self.details)
-    
-class Illegal_Character(Error):
-    def __init__(self, character):
-        super().__init__('Illegal Character', "'{}'".format(character))
+        return 'Invalid Syntax Error'

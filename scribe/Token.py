@@ -1,42 +1,66 @@
 class Token:
-    def __init__(self, name, value):
-        self.name = name
+    def __init__(self, value):
         self.value = value
     
+class Plus_Token(Token):
+    def __init__(self):
+        super().__init__(None)
+    
     def __repr__(self):
-        if self.value:
-            return '{} Token: {}'.format(self.name, self.value)
-        else:
-            return '{} Token'.format(self.name)
-
-class Plus(Token):
+        return '+'
+    
+class Minus_Token(Token):
     def __init__(self):
-        super().__init__('Plus', None)
-
-class Minus(Token):
+        super().__init__(None)
+    
+    def __repr__(self):
+        return '-'
+    
+class Multiply_Token(Token):
     def __init__(self):
-        super().__init__('Minus', None)
-
-class Multiply(Token):
+        super().__init__(None)
+    
+    def __repr__(self):
+        return '*'
+    
+class Divide_Token(Token):
     def __init__(self):
-        super().__init__('Multiply', None)
-
-class Divide(Token):
+        super().__init__(None)
+    
+    def __repr__(self):
+        return '/'
+    
+class Left_Parenthesis_Token(Token):
     def __init__(self):
-        super().__init__('Divide', None)
+        super().__init__(None)
+    
+    def __repr__(self):
+        return '('
 
-class Left_Parenthesis(Token):
+class Right_Parenthesis_Token(Token):
     def __init__(self):
-        super().__init__('Left Parenthesis', None)
-
-class Right_Parenthesis(Token):
-    def __init__(self):
-        super().__init__('Right Parenthesis', None)
-
-class Integer(Token):
+        super().__init__(None)
+    
+    def __repr__(self):
+        return ')'
+    
+class Integer_Token(Token):
     def __init__(self, value):
-        super().__init__('Integer', value)
+        super().__init__(value)
 
-class Float(Token):
+    def __repr__(self):
+        return str(self.value)
+    
+class Float_Token(Token):
     def __init__(self, value):
-        super().__init__('Float', value)
+        super().__init__(value)
+
+    def __repr__(self):
+        return str(self.value)
+    
+class EOF_Token(Token):
+    def __init__(self):
+        super().__init__(None)
+
+    def __repr__(self):
+        return 'EOF'

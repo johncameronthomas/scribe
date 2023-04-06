@@ -1,7 +1,11 @@
 import Lexer
+import Parser
 
-code = '-1.3 * 233.34324'
-lexer = Lexer.Lexer(code)
-tokens, error = lexer.make_tokens()
+while True:
+    code = input('> ')
 
-print(tokens, error)
+    lexer = Lexer.Lexer(code)
+    tokens, error = lexer.lex()
+    parser = Parser.Parser(tokens)
+    tree = parser.parse()
+    print(tree)
