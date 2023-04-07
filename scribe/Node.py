@@ -13,11 +13,3 @@ class Binary_Operation_Node(Node):
 
     def __repr__(self):
         return '({} {} {})'.format(self.left_child, self.token, self.right_child)
-    
-class Unary_Operation_Node(Node):
-    def __init__(self, token, child):
-        super().__init__(token)
-        self.child = child
-
-    def __repr__(self):
-        return '({}{})'.format(self.token, self.child)

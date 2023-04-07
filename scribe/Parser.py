@@ -1,11 +1,13 @@
 import Token
 import Node
+import Error
 
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
         self.index = 0
         self.token = tokens[0]
+        self.error = None
 
     def advance(self):
         self.index += 1
@@ -29,6 +31,8 @@ class Parser:
             token = self.token
             self.advance()
             return Node.Node(token)
+        else:
+            self.error = Error.Invalid_Syntax_Error('Expected Integer or Float.')
 
     def create_binary_operation_node(self, function, valid_token_type):
         left_child = function()
@@ -40,4 +44,7 @@ class Parser:
         return left_child
 
     def parse(self):
-        return self.create_subtraction_node()
+        syntax_tree = self.create_subtraction_node()
+        if not self.error and type(self.token) != Token.EOF_Token:
+            self.error = Error.Invalid_Syntax_Error('Expected Operator.')
+        return syntax_tree, self.error
