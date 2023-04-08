@@ -15,36 +15,53 @@ class Parser:
             self.token = self.tokens[self.index]
     
     def create_subtraction_node(self):
-        return self.create_binary_operation_node(self.create_addition_node, Token.Minus_Token)
+        return self.create_binary_operation_node(self.create_addition_node, Token.Minus_Token, Node.Subtraction_Node)
 
     def create_addition_node(self):
-        return self.create_binary_operation_node(self.create_division_node, Token.Plus_Token)
+        return self.create_binary_operation_node(self.create_division_node, Token.Plus_Token, Node.Addition_Node)
 
     def create_division_node(self):
-        return self.create_binary_operation_node(self.create_multiplication_node, Token.Divide_Token)
+        return self.create_binary_operation_node(self.create_multiplication_node, Token.Divide_Token, Node.Division_Node)
     
     def create_multiplication_node(self):
-        return self.create_binary_operation_node(self.create_number_node, Token.Multiply_Token)
+        return self.create_binary_operation_node(self.create_number_node, Token.Multiply_Token, Node.Multiplication_Node)
 
     def create_number_node(self):
-        if type(self.token) in (Token.Integer_Token, Token.Float_Token):
-            token = self.token
-            self.advance()
-            return Node.Node(token)
-        else:
-            self.error = Error.Invalid_Syntax_Error('Expected Integer or Float.')
+        match type(self.token):
+            case Token.Integer_Token:
+                token = self.token
+                self.advance()
+                return Node.Integer_Node(token.value)
+            case Token.Float_Token:
+                token = self.token
+                self.advance()
+                return Node.Float_Node(token.value)
+            case Token.Left_Parenthesis_Token:
+                self.advance()
+                node = self.create_subtraction_node()
+                if self.error:
+                    return node
+                else:
+                    if type(self.token) == Token.Right_Parenthesis_Token:
+                        self.advance()
+                        return node
+                    else:
+                        self.error = Error.Invalid_Syntax_Error("Expected ')'")
+                        return node
+            case _:
+                self.error = Error.Invalid_Syntax_Error('Expeced Integer or Float.')
 
-    def create_binary_operation_node(self, function, valid_token_type):
+    def create_binary_operation_node(self, function, valid_token_type, node_type):
         left_child = function()
         while type(self.token) == valid_token_type:
             token = self.token
             self.advance()
             right_child = function()
-            left_child = Node.Binary_Operation_Node(token, left_child, right_child)
+            left_child = node_type(left_child, right_child)
         return left_child
 
     def parse(self):
-        syntax_tree = self.create_subtraction_node()
+        node = self.create_subtraction_node()
         if not self.error and type(self.token) != Token.EOF_Token:
             self.error = Error.Invalid_Syntax_Error('Expected Operator.')
-        return syntax_tree, self.error
+        return node, self.error
