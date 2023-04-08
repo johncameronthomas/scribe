@@ -23,7 +23,7 @@ class Interpreter:
                 try:
                     return self.evaluate_node(node.left_child) / self.evaluate_node(node.right_child)
                 except:
-                    self.error = Error.Division_By_Zero_Error()
+                    self.error = Error.Division_By_Zero_Error(node.location)
                     return 0
             case Node.Multiplication_Node:
                 return self.evaluate_node(node.left_child) * self.evaluate_node(node.right_child)

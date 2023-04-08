@@ -3,22 +3,21 @@ import Parser
 import Interpreter
 
 def print_error(code, error):
-    index_of_first_character = error.location.index_of_first_character
-    index_of_last_character = error.location.index_of_last_character
-    length = (index_of_last_character + 1) - index_of_first_character
+    left_bound = error.location.left_bound
+    length = error.location.right_bound - left_bound
+    arrow_string = (' ' * left_bound) + ('^' * length)
+    print()
+    print("Line {} in file '{}'.".format(error.location.line_number, error.location.file_name))
     print(code)
-    arrow_string = (' ' * index_of_first_character) + ('^' * length)
     print(arrow_string)
-    print(error)
-
+    print('{}: {}'.format(type(error).__name__, error.message))
+    print()
 
 print('Scribe')
 while True:
-    print()
     code = input('> ')
-    print()
 
-    lexer = Lexer.Lexer(code)
+    lexer = Lexer.Lexer(code, 0, 'Command Line Interpreter')
     tokens, error = lexer.lex()
     if error:
         print_error(code, error)

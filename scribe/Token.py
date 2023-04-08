@@ -60,8 +60,8 @@ class Float_Token(Token):
         return str(self.value)
     
 class EOF_Token(Token):
-    def __init__(self):
-        super().__init__(None, None)
+    def __init__(self, location):
+        super().__init__(None, location)
 
     def __repr__(self):
         return 'EOF'

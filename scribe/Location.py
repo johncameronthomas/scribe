@@ -1,6 +1,6 @@
 class Location:
-    def __init__(self, index_of_first_character, index_of_last_character, line, context):
-        self.index_of_first_character = index_of_first_character
-        self.index_of_last_character = index_of_last_character
-        self.line = line
-        self.context = context
+    def __init__(self, left_bound, right_bound, line_number, file_name):
+        self.left_bound = left_bound
+        self.right_bound = right_bound
+        self.line_number = line_number
+        self.file_name = file_name
