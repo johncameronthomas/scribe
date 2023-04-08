@@ -1,5 +1,6 @@
 import Token
 import Error
+import Location
 import contants
 
 class Lexer:
@@ -22,22 +23,22 @@ class Lexer:
             if self.error:
                 break
             if self.character == '+':
-                self.tokens.append(Token.Plus_Token())
+                self.tokens.append(Token.Plus_Token(Location.Location(self.index, self.index, 0, None)))
                 self.advance()
             elif self.character == '-':
-                self.tokens.append(Token.Minus_Token())
+                self.tokens.append(Token.Minus_Token(Location.Location(self.index, self.index, 0, None)))
                 self.advance()
             elif self.character == '*':
-                self.tokens.append(Token.Multiply_Token())
+                self.tokens.append(Token.Multiply_Token(Location.Location(self.index, self.index, 0 ,None)))
                 self.advance()
             elif self.character == '/':
-                self.tokens.append(Token.Divide_Token())
+                self.tokens.append(Token.Divide_Token(Location.Location(self.index, self.index, 0, None)))
                 self.advance()
             elif self.character == '(':
-                self.tokens.append(Token.Left_Parenthesis_Token())
+                self.tokens.append(Token.Left_Parenthesis_Token(Location.Location(self.index, self.index, 0, None)))
                 self.advance()
             elif self.character == ')':
-                self.tokens.append(Token.Right_Parenthesis_Token())
+                self.tokens.append(Token.Right_Parenthesis_Token(Location.Location(self.index, self.index, 0, None)))
                 self.advance()
             elif self.character == '#':
                 self.advance()
@@ -45,12 +46,13 @@ class Lexer:
             elif self.character in ' /t':
                 self.advance()
             else:
-                self.error = Error.Illegal_Character_Error(self.character)
+                self.error = Error.Illegal_Character_Error(self.character, Location.Location(self.index, self.index, 0, None))
         self.tokens.append(Token.EOF_Token())
         return self.tokens, self.error
     
     def lex_integer_or_float(self):
         number = ''
+        index_of_first_character = self.index - 1
         if self.character == '-':
             number += self.character
             self.advance()
@@ -61,13 +63,13 @@ class Lexer:
             try:
                 number = float(number)
             except:
-                self.error = Error.Illegal_Character_Error(self.character)
+                self.error = Error.Illegal_Character_Error(self.character, Location.Location(index_of_first_character, self.index, 0, None))
             else:
-                self.tokens.append(Token.Float_Token(number))
+                self.tokens.append(Token.Float_Token(number, Location.Location(index_of_first_character, self.index, 0, None)))
         else:
             try:
                 number = int(number)
             except:
-                self.error = Error.Illegal_Character_Error(self.character)
+                self.error = Error.Illegal_Character_Error(self.character, Location.Location(self.index, self.index, 0, None))
             else:
-                self.tokens.append(Token.Integer_Token(number))
+                self.tokens.append(Token.Integer_Token(number, Location.Location(index_of_first_character, self.index, 0, None)))
