@@ -51,7 +51,10 @@ class Lexer:
     
     def lex_integer_or_float(self):
         number = ''
-        while self.character != None and self.character in contants.base10_digits + '.' + '-':
+        if self.character == '-':
+            number += self.character
+            self.advance()
+        while self.character != None and self.character in contants.base10_digits + '.':
             number += self.character
             self.advance()
         if '.' in number:

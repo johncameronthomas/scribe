@@ -1,0 +1,33 @@
+// static
+integer a = #2;
+a = #3;
+
+// dynamic
+any a = 'Hello world';
+a = #3.14;
+
+// function
+function func = {
+    take integer a; take integer b;
+    return integer sum;
+    sum = a + b;
+    end;
+};
+any result = func(#1, #2);
+
+// if statement
+if True then {
+    print('It was true.');
+} else {
+    print('It was false');
+};
+
+// for loop
+for i in <#4, #3, #2, #1, #0> do {
+    print(i);
+};
+
+// while loop
+while True do {
+    print('Hello world!');
+};
