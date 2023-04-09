@@ -1,4 +1,3 @@
-import Node
 import Error
 
 class Interpreter:
@@ -10,26 +9,20 @@ class Interpreter:
         return self.evaluate_node(self.node), self.error
 
     def evaluate_node(self, node):
-        match type(node):
-            case Node.Integer_Node:
+        match node.name:
+            case 'Integer':
                 return node.value
-            case Node.Float_Node:
+            case 'Float':
                 return node.value
-            case Node.Subtraction_Node:
+            case 'Subtraction':
                 return self.evaluate_node(node.left_child) - self.evaluate_node(node.right_child)
-            case Node.Addition_Node:
+            case 'Addition':
                 return self.evaluate_node(node.left_child) + self.evaluate_node(node.right_child)
-            case Node.Division_Node:
+            case 'Division':
                 try:
                     return self.evaluate_node(node.left_child) / self.evaluate_node(node.right_child)
                 except:
-                    self.error = Error.Division_By_Zero_Error(node.location)
+                    self.error = Error.Runtime_Error('Division by Zero', '', node.location, None)
                     return 0
-            case Node.Multiplication_Node:
+            case 'Multiplication':
                 return self.evaluate_node(node.left_child) * self.evaluate_node(node.right_child)
-            
-    def create_integer_node_or_float_node(number):
-        if type(number) == int:
-            return Node.Integer_Node(number)
-        elif type(number) == float:
-            return Node.Float_Node(number)

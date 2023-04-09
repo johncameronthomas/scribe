@@ -1,67 +1,38 @@
+import Node
+
 class Token:
-    def __init__(self, value, location):
-        self.value = value
+    def __init__(self, name, location):
+        self.name = name
         self.location = location
-    
-class Plus_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
-    
-    def __repr__(self):
-        return '+'
-    
-class Minus_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
-    
-    def __repr__(self):
-        return '-'
-    
-class Multiply_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
-    
-    def __repr__(self):
-        return '*'
-    
-class Divide_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
-    
-    def __repr__(self):
-        return '/'
-    
-class Left_Parenthesis_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
-    
-    def __repr__(self):
-        return '('
-
-class Right_Parenthesis_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
-    
-    def __repr__(self):
-        return ')'
-    
-class Integer_Token(Token):
-    def __init__(self, value, location):
-        super().__init__(value, location)
 
     def __repr__(self):
-        return str(self.value)
-    
-class Float_Token(Token):
-    def __init__(self, value, location):
-        super().__init__(value, location)
+        return '{} Token'.format(self.name)
 
-    def __repr__(self):
-        return str(self.value)
-    
-class EOF_Token(Token):
-    def __init__(self, location):
-        super().__init__(None, location)
+    def convert_to_node(self):
+        return Node.Node(self.name, self.location)
 
+class Value_Token(Token):
+    def __init__(self, name, value, location):
+        super().__init__(name, location)
+        self.value = value
+    
     def __repr__(self):
-        return 'EOF'
+        return '{} Token: {}'.format(self.name, self.value)
+
+    def convert_to_node(self):
+        return Node.Value_Node(self.name, self.value, self.location)
+    
+class Binary_Operator_Token(Token):
+    def convert_to_node(self, left_child, right_child):
+        match self.name:
+            case 'Plus':
+                name = 'Addition'
+            case 'Minus':
+                name = 'Subtraction'
+            case 'Multiply':
+                name = 'Multiplication'
+            case 'Divide':
+                name = 'Division'
+            case _:
+                name = None
+        return Node.Binary_Operation_Node(name, self.location, left_child, right_child)
