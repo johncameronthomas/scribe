@@ -1,4 +1,3 @@
-import Context
 import Error
 
 class Interpreter:
@@ -19,7 +18,12 @@ class Interpreter:
             case 'Variable Assignment':
                 return self.context.set(node.middle_child.value, self.evaluate_node(node.right_child))
             case 'Indentifier':
-                return self.context.get(node.value)
+                result = self.context.get(node.value)
+                if result == None:
+                    self.error = Error.Runtime_Error('Undefined Variable', "'{}' is undefined.".format(node.value), node.location, self.context)
+                    return 0
+                else:
+                    return result
             case 'Subtraction':
                 return self.evaluate_node(node.left_child) - self.evaluate_node(node.right_child)
             case 'Addition':

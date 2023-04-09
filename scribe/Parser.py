@@ -55,7 +55,7 @@ class Parser:
     def create_contained_node(self):
         if self.token.name == 'Left Parenthesis':
             self.advance()
-            node = self.create_subtraction_node()
+            node = self.create_variable_assignment_node()
             if not self.error:
                 if self.token.name == 'Right Parenthesis':
                     self.advance()
