@@ -35,4 +35,4 @@ class Binary_Operator_Token(Token):
                 name = 'Division'
             case _:
                 name = None
-        return Node.Binary_Operation_Node(name, self.location, left_child, right_child)
+        return Node.Binary_Operation_Node(name, left_child, right_child, self.location)

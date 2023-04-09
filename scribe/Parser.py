@@ -1,4 +1,5 @@
 import Error
+import Node
 
 class Parser:
     def __init__(self, tokens):
@@ -20,6 +21,24 @@ class Parser:
             right_child = next_node_creation_function()
             left_child = token.convert_to_node(left_child, right_child)
         return left_child
+    
+    def create_variable_assignment_node(self):
+        if self.token.name == 'Keyword':
+            data_type = self.token.convert_to_node()
+            self.advance()
+            if self.token.name != 'Indentifier':
+                self.error = Error.Error('Invalid Syntax', 'Expected Indentifier.', self.token.location)
+            else:
+                name = self.token.convert_to_node()
+                self.advance()
+                if self.token.name != 'Equals':
+                    self.error = Error.Error('Invalid Syntax', "Expected '='.", self.token.location)
+                else:
+                    location = self.token.location
+                    self.advance()
+                    value = self.create_subtraction_node()
+                    return Node.Ternary_Operation_Node('Variable Assignment', data_type, name, value, location)
+        return self.create_subtraction_node()
     
     def create_subtraction_node(self):
         return self.create_binary_operation_node(self.create_addition_node, 'Minus')
@@ -47,7 +66,7 @@ class Parser:
             return self.create_number_node()
     
     def create_number_node(self):
-        if self.token.name in ('Integer', 'Float'):
+        if self.token.name in ('Integer', 'Float', 'Indentifier'):
             token = self.token
             self.advance()
             return token.convert_to_node()
@@ -55,7 +74,7 @@ class Parser:
             self.error = Error.Error('Invalid Syntax', "Expected '#'", self.token.location)
 
     def parse(self):
-        node = self.create_subtraction_node()
+        node = self.create_variable_assignment_node()
         if not self.error and self.token.name != 'End of File':
             print(self.token)
             self.error = Error.Error('Invalid Syntax', "Expected '+', '-', '*', or '/'.", self.token.location)

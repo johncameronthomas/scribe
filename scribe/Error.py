@@ -20,3 +20,8 @@ class Runtime_Error(Error):
     def __init__(self, name, message, location, context):
         super().__init__(name, message, location)
         self.context = context
+
+    def print_error(self, code):
+        print('Traceback:')
+        print(self.context)
+        super().print_error(code)

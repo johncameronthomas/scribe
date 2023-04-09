@@ -1,6 +1,9 @@
 import Lexer
 import Parser
 import Interpreter
+import Context
+
+context = Context.Context('root', None)
 
 print('Scribe')
 while True:
@@ -20,7 +23,7 @@ while True:
         error.print_error(code)
         print()
         continue
-    interpreter = Interpreter.Interpreter(node)
+    interpreter = Interpreter.Interpreter(node, context)
     result, error = interpreter.interpret()
     if error:
         print()

@@ -1,8 +1,10 @@
+import Context
 import Error
 
 class Interpreter:
-    def __init__(self, node):
+    def __init__(self, node, context):
         self.node = node
+        self.context = context
         self.error = None
 
     def interpret(self):
@@ -14,6 +16,10 @@ class Interpreter:
                 return node.value
             case 'Float':
                 return node.value
+            case 'Variable Assignment':
+                return self.context.set(node.middle_child.value, self.evaluate_node(node.right_child))
+            case 'Indentifier':
+                return self.context.get(node.value)
             case 'Subtraction':
                 return self.evaluate_node(node.left_child) - self.evaluate_node(node.right_child)
             case 'Addition':
@@ -22,7 +28,7 @@ class Interpreter:
                 try:
                     return self.evaluate_node(node.left_child) / self.evaluate_node(node.right_child)
                 except:
-                    self.error = Error.Runtime_Error('Division by Zero', '', node.location, None)
+                    self.error = Error.Runtime_Error('Division by Zero', '', node.location, self.context)
                     return 0
             case 'Multiplication':
                 return self.evaluate_node(node.left_child) * self.evaluate_node(node.right_child)

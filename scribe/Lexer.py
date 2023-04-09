@@ -1,6 +1,7 @@
 import Token
 import Error
 import Location
+import constants
 
 class Lexer:
     def __init__(self, code, line_number, file_name):
@@ -48,8 +49,10 @@ class Lexer:
                         self.advance()
                     case '#':
                         tokens.append(self.lex_integer_or_float())
-            elif self.character in ' /t':
+            elif self.character in ' \t':
                 self.advance()
+            elif self.character in constants.VALID_WORD_CHARACTERS:
+                tokens.append(self.lex_keyword_or_indentifier())
             else:
                 self.error = Error.Error('Illegal Character', self.character, self.location)
         tokens.append(Token.Token('End of File', self.location))
@@ -62,7 +65,7 @@ class Lexer:
         if self.character == '-':
             number += '-'
             self.advance()
-        while self.character != None and self.character in '0123456789.' and self.error == None:
+        while self.character != None and self.character in constants.DIGITS + '.' and self.error == None:
             if self.character == '.' and '.' in number:
                 self.error = Error.Error('Illegal Character', '.', self.location)
             else:
@@ -75,3 +78,15 @@ class Lexer:
                 return Token.Value_Token('Float', float(number), Location.Location(left_bound, self.index, self.line_number, self.file_name))
             else:
                 return Token.Value_Token('Integer', int(number), Location.Location(left_bound, self.index, self.line_number, self.file_name))
+            
+    def lex_keyword_or_indentifier(self):
+        left_bound = self.index
+        word = ''
+        while self.character != None and self.character in constants.VALID_WORD_CHARACTERS:
+            word += self.character
+            self.advance()
+        if word in constants.KEYWORDS:
+            name = 'Keyword'
+        else:
+            name = 'Indentifier'
+        return Token.Value_Token(name, word, Location.Location(left_bound, self.index, self.line_number, self.file_name))
