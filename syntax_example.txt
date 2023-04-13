@@ -1,10 +1,27 @@
-// static
-integer a = #2;
-a = #3;
+types:
+    boolean -> True, False, Null
+    integer -> all integers
+    rational -> all rational numbers
+    string -> text
+    set -> a group of values, cannot contain any value more than once
+    array -> a group of values
+    map -> a group of key value Parenthesis
+    structure -> a group of indentifier value pairs
+    block -> ()
+
+define method add = rational a, rational b -> {
+    define rational sum = a + b;
+} -> rational sum;
+
+define sum = add(#3.14, #1.0);
+output(sum) // 4.14
+
+run create_class with #3.14 on instance;
+instance.add()
 
 // dynamic
-any a = 'Hello world';
-a = #3.14;
+define a; let a = 'Hello world';
+let a = #3.14;
 
 // function
 function func = {
