@@ -24,7 +24,7 @@ class Parser:
             token = self.token
             self.advance()
             right_child = self.create_symbol_definition_node()
-            left_child = Binary_Operation_Node('Symbol Assignment Node', left_child, right_child, token.location)
+            left_child = Binary_Operation_Node('Symbol Assignment', left_child, right_child, token.location)
         return left_child
 
     def create_symbol_definition_node(self):

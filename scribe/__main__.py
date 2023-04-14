@@ -16,12 +16,20 @@ while True:
         error.print_error(code)
         print()
         continue
+
     parser = Parser(tokens)
     tree, error = parser.parse()
     if error:
-        print(tree)
         print()
         error.print_error(code)
         print()
         continue
-    print(tree)
+
+    interpreter = Interpreter(tree, context)
+    result, error = interpreter.interpret()
+    if error:
+        print()
+        error.print_error(code)
+        print()
+        continue
+    print(result)
